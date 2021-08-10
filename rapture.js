@@ -1,4 +1,11 @@
 
+class Map {
+
+	constructor() {
+	}
+
+}
+
 var x_pos = 0;
 var draw = function (ctx, canvas_width, canvas_height, dt) {
 	ctx.fillStyle = 'green';

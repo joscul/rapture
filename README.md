@@ -6,6 +6,11 @@ Do this once when you want to start editing code on your computer.
 git clone git@github.com:joscul/rapture.git
 ```
 
+### Generate SSH key pair. Do this once and keep those keys for some time.
+```
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
 ### Update your codebase:
 Do this every time you start a new session.
 ```

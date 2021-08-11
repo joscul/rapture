@@ -22,6 +22,10 @@ var state = {
 var draw = function (ctx, canvas_width, canvas_height, dt) {
 	ctx.fillStyle = state.color;
 	ctx.fillRect(state.x_pos, state.y_pos, state.width, state.height);
+	ctx.fillStyle = "red";
+	ctx.beginPath();
+	ctx.arc(100, 75, 50, 0, Math.PI);
+	ctx.fill();
 	if (state.right_pressed && (state.x_pos+state.width) < canvas_width) {
 		state.x_pos += state.speed * dt; //Speed in pixels per second multiplied by seconds since last update
 	}

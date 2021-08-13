@@ -68,12 +68,77 @@ class Obstacle {
 
 }
 
+var if_items_at_position = function(items, x_pos, y_pos) {
+	for(var i in items) {
+		if	(items[i].overlaps_with_position(x_pos, y_pos)) {
+			return true;
+
+		}
+	}
+	return false;
+}
+
+class Item {
+
+	constructor(initial_width, initial_height, initial_xpos, initial_ypos) {
+		var img = new Image(); // Image constructor
+		img.src = 'key.png';
+		this.state = {
+			image: img,
+			width: initial_width,
+			height: initial_height,
+			
+			x_pos: initial_xpos, 
+			y_pos: initial_ypos,
+			is_in_inventory: false 	
+		}
+	}
+
+
+	draw(ctx) {
+
+		const {image, width, height, x_pos, y_pos, is_in_inventory} = this.state;
+
+			if ((is_in_inventory)){
+				ctx.drawImage(image, 0, 0);
+			
+		}	
+		else{ 
+		ctx.drawImage(image, x_pos, y_pos);}
+
+	}
+
+	update(global_state, dt) {
+		if (this.overlaps_with_position (global_state.player.state.x_pos,  global_state.player.state.y_pos)){
+			this.state.is_in_inventory = true;
+		}
+	}
+	
+
+	overlaps_with_position(x, y) {
+		const {width, height, x_pos, y_pos} = this.state;
+		if (x > x_pos+width){
+			return false;
+		}
+		if (x < x_pos){
+			return false;
+		}
+		if (y > y_pos+height){
+			return false;
+		}
+		if (y < y_pos){
+			return false;
+		}
+		return true;
+	}
+
+}
 class Player {
 
 	constructor() {
 		this.state = {
 			x_pos: 55,
-			y_pos: 55,
+			y_pos: 100,
 			shape: "circle",
 			radius: 20,
 			width: 100,
@@ -229,13 +294,19 @@ var initial_state = function (canvas) {
 		player: new Player(),
 		background: new Background(canvas.width, canvas.height),
 		obstacles: [
-			new Obstacle(200, 100, 100, 100),
-			new Obstacle(100, 200, 300, 400),
+			new Obstacle(200, 100, 100, 700),
+			new Obstacle(100, 200, 270, 150),
 			new Obstacle(30, canvas.height/1.2, canvas.width/2, 0),
 			new Obstacle(30,canvas.height ,0 ,0),//left edge
-			new Obstacle(canvas.width,30,0,0),//top edge
+			new Obstacle(canvas.width,70,0,0),//top edge
 			new Obstacle(30, canvas.height, canvas.width - 30, 0),//right edge
 			new Obstacle(canvas.width, 30, 0, canvas.height - 30),//bottom edge
+			new Obstacle(200, 100, 10, 250),
+			new Obstacle(200, 100, 100, 30),
+		],
+		items: [
+			new Item(100, 100, canvas.width-100, 100),
+			
 		]
 	};
 }
@@ -247,9 +318,18 @@ var draw = function (ctx, state, dt) {
 	for(var i in state.obstacles){
 		state.obstacles[i].draw	(ctx);
 	}
+	for(var i in state.items){
+		state.items[i].draw	(ctx);
+	}
 	state.player.update(state, dt);	
 	state.background.update(state, dt);
-    //state.obstacles.update(state, dt);
+
+	for(var i in state.obstacles){
+		state.obstacles[i].update	(state, dt);
+	}
+	for(var i in state.items){
+		state.items[i].update	(state, dt);
+	}
 };
 
 var clear_canvas = function (ctx, state) {

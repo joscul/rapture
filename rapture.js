@@ -56,30 +56,35 @@ class Player {
 			//Draw left eye
 			ctx.fillStyle = "white";
 			ctx.beginPath();
-			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.25, radius*0.25, 0, 2*Math.PI);
+			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.14, radius*0.25, 0, 2*Math.PI);
 			ctx.fill();
 			ctx.strokeStyle = "black";
 			ctx.beginPath();
 			ctx.lineWidth = 1;
-			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.25, radius*0.25, 0, 2*Math.PI);
+			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.14, radius*0.25, 0, 2*Math.PI);
 			ctx.stroke();
 			ctx.fillStyle = "black";
 			ctx.beginPath();
-			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.25, radius*0.1, 0, 2*Math.PI);
+			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.14, radius*0.1, 0, 2*Math.PI);
 			ctx.fill();
 			//Draw right eye
 			ctx.fillStyle = "white";
 			ctx.beginPath();
-			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.25, radius*0.25, 0, 2*Math.PI);
+			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.14, radius*0.25, 0, 2*Math.PI);
 			ctx.fill();
 			ctx.strokeStyle = "black";
 			ctx.beginPath();
 			ctx.lineWidth = 1;
-			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.25, radius*0.25, 0, 2*Math.PI);
+			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.14, radius*0.25, 0, 2*Math.PI);
 			ctx.stroke();
 			ctx.fillStyle = "black";
 			ctx.beginPath();
-			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.25, radius*0.1, 0, 2*Math.PI);
+			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.14, radius*0.1, 0, 2*Math.PI);
+			ctx.fill();
+			//Draw hat
+			ctx.fillStyle = "brown"
+			ctx.beginPath();
+			ctx.arc(x_pos, y_pos, radius, 1.14*Math.PI, 1.86*Math.PI);
 			ctx.fill();
 		} else if (shape == "rect"){
 			ctx.fillRect(x_pos-(width*0.5), y_pos-(height*0.5), width, height);

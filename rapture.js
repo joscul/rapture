@@ -1,3 +1,15 @@
+
+var if_obstacle_at_position = function(obstacles, x_pos, y_pos) {
+	for(var i in obstacles) {
+		if	(obstacles[i].overlaps_with_position(x_pos, y_pos)) {
+			return true;
+
+		}
+	}
+	return false;
+}
+
+
 class Obstacle {
 
 	constructor(initial_width, initial_height, initial_xpos, initial_ypos) {
@@ -21,6 +33,23 @@ class Obstacle {
 
 	update(global_state, dt) {
 		
+	}
+
+	overlaps_with_position(x, y) {
+		const {width, height, x_pos, y_pos} = this.state;
+		if (x > x_pos+width){
+			return false;
+		}
+		if (x < x_pos){
+			return false;
+		}
+		if (y > y_pos+height){
+			return false;
+		}
+		if (y < y_pos){
+			return false;
+		}
+		return true;
 	}
 
 }
@@ -99,17 +128,18 @@ class Player {
 			var right_edge = x_pos + radius
 			var top_edge = y_pos - radius
 			var bottom_edge = y_pos + radius
+	
 		}
-		if (global_state.right_pressed && right_edge < global_state.canvas_width) {
+		if (global_state.right_pressed && !if_obstacle_at_position(global_state.obstacles, right_edge + distance, y_pos)) {
 			this.state.x_pos += distance;
 		}
-		if (global_state.left_pressed && left_edge > 0) {
+		if (global_state.left_pressed && !if_obstacle_at_position(global_state.obstacles, left_edge - distance, y_pos)) {
 			this.state.x_pos -= distance;
 		}
-		if (global_state.down_pressed && bottom_edge < global_state.canvas_height) {
+		if (global_state.down_pressed && !if_obstacle_at_position(global_state.obstacles, x_pos, bottom_edge + distance)) {
 			this.state.y_pos += distance;
 		}
-		if (global_state.up_pressed && top_edge > 0) {
+		if (global_state.up_pressed && !if_obstacle_at_position(global_state.obstacles, x_pos, top_edge - distance) ) {
 			this.state.y_pos -= distance;
 		}
 	}
@@ -153,7 +183,11 @@ var initial_state = function (canvas) {
 		obstacles: [
 			new Obstacle(200, 100, 100, 100),
 			new Obstacle(100, 200, 300, 400),
-			new Obstacle(10, canvas.height/1.2, canvas.width/2, 0),
+			new Obstacle(30, canvas.height/1.2, canvas.width/2, 0),
+			new Obstacle(30,canvas.height ,0 ,0),//left edge
+			new Obstacle(canvas.width,30,0,0),//top edge
+			new Obstacle(30, canvas.height, canvas.width - 30, 0),//right edge
+			new Obstacle(canvas.width, 30, 0, canvas.height - 30),//bottom edge
 		]
 	};
 }

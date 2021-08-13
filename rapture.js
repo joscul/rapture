@@ -53,7 +53,50 @@ class Obstacle {
 	}
 
 }
+class Item {
 
+	constructor(initial_width, initial_height, initial_xpos, initial_ypos) {
+		var img = new Image(); // Image constructor
+		img.src = 'key.png';
+		this.state = {
+			image: img,
+			width: initial_width,
+			height: initial_height,
+			
+			x_pos: initial_xpos, 
+			y_pos: initial_ypos,
+
+		}
+	}
+
+	draw(ctx) {
+		const {image, width, height, x_pos, y_pos} = this.state;
+		ctx.drawImage(image, x_pos, y_pos);
+
+	}
+
+	update(global_state, dt) {
+		
+	}
+
+	overlaps_with_position(x, y) {
+		const {width, height, x_pos, y_pos} = this.state;
+		if (x > x_pos+width){
+			return false;
+		}
+		if (x < x_pos){
+			return false;
+		}
+		if (y > y_pos+height){
+			return false;
+		}
+		if (y < y_pos){
+			return false;
+		}
+		return true;
+	}
+
+}
 class Player {
 
 	constructor() {
@@ -193,6 +236,10 @@ var initial_state = function (canvas) {
 			new Obstacle(canvas.width,30,0,0),//top edge
 			new Obstacle(30, canvas.height, canvas.width - 30, 0),//right edge
 			new Obstacle(canvas.width, 30, 0, canvas.height - 30),//bottom edge
+		],
+		items: [
+			new Item(100, 100, canvas.width-100, 100),
+			
 		]
 	};
 }
@@ -203,6 +250,9 @@ var draw = function (ctx, state, dt) {
 	state.player.draw(ctx);	
 	for(var i in state.obstacles){
 		state.obstacles[i].draw	(ctx);
+	}
+	for(var i in state.items){
+		state.items[i].draw	(ctx);
 	}
 	state.player.update(state, dt);	
 	state.background.update(state, dt);

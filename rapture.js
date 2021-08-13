@@ -61,6 +61,19 @@ class Background {
 
 }
 
+var initial_state = function (canvas) {
+	return {
+		right_pressed: false,
+		left_pressed: false,
+		up_pressed: false,
+		down_pressed: false,
+		canvas_width: canvas.width,
+		canvas_height: canvas.height,
+		player: new Player(),
+		background: new Background(canvas.width, canvas.height)
+	};
+}
+
 var draw = function (ctx, state, dt) {
 	state.background.draw(ctx)
 	state.player.draw(ctx)
@@ -127,16 +140,7 @@ var main_loop = function (ctx, state, timestamp) {
 
 var start_main_loop = function (canvas) {
 	var ctx = canvas.getContext("2d");
-	var state = {
-		right_pressed: false,
-		left_pressed: false,
-		up_pressed: false,
-		down_pressed: false,
-		canvas_width: canvas.width,
-		canvas_height: canvas.height,
-		player: new Player(),
-		background: new Background(canvas.width, canvas.height)
-	}
+	var state = initial_state(canvas);
 
 	document.addEventListener("keydown", (event) => on_keydown(event, state));
 	document.addEventListener("keyup", (event) => on_keyup(event, state));

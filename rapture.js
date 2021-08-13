@@ -6,7 +6,7 @@ class Player {
 			x_pos: 50,
 			y_pos: 50,
 			shape: "circle",
-			radius: 50,
+			radius: 20,
 			width: 100,
 			height: 100,
 			color: "yellow",

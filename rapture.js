@@ -7,7 +7,7 @@ class Player {
 			y_pos: 0,
 			width: 100,
 			height: 100,
-			color: "green",
+			color: "yellow",
 			speed: 300,
 		}
 	}
@@ -15,7 +15,16 @@ class Player {
 	draw(ctx) {
 		const {color, x_pos, y_pos, width, height} = this.state;
 		ctx.fillStyle = color;
-		ctx.fillRect(x_pos, y_pos, width, height);
+		//ctx.fillRect(x_pos, y_pos, width, height);
+		//ctx.clearRect(x_pos+5, y_pos+5, width-10, height-10);
+		ctx.beginPath();
+		ctx.arc(x_pos+75, y_pos+75, 50, 0, 2*Math.PI);
+		ctx.fill();
+		ctx.fillStyle = "red";
+		ctx.beginPath();
+		ctx.arc(75, 75, 40, 0,25*Math.P, 0,75*Math.PI);
+		ctx.fill();
+
 	}
 
 	update(global_state, dt) {
@@ -74,13 +83,10 @@ var initial_state = function (canvas) {
 	};
 }
 
+
 var draw = function (ctx, state, dt) {
 	state.background.draw(ctx)
 	state.player.draw(ctx)
-	ctx.fillStyle = "red";
-	ctx.beginPath();
-	ctx.arc(100, 75, 50, 0, Math.PI);
-	ctx.fill();
 
 	state.player.update(state, dt);
 	state.background.update(state, dt);

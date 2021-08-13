@@ -9,6 +9,20 @@ var if_obstacle_at_position = function(obstacles, x_pos, y_pos) {
 	return false;
 }
 
+var if_obstacle_at_coordinates = function(obstacles, coordinates) {
+	for(var i in coordinates) {
+		var coordinate = coordinates[i];
+		for(var i in obstacles) {
+			if	(obstacles[i].overlaps_with_position(coordinate[0], coordinate[1])) {
+				return true;
+			}
+		}
+	
+	}
+	return false;
+	
+}
+
 
 class Obstacle {
 
@@ -58,8 +72,8 @@ class Player {
 
 	constructor() {
 		this.state = {
-			x_pos: 50,
-			y_pos: 50,
+			x_pos: 55,
+			y_pos: 55,
 			shape: "circle",
 			radius: 20,
 			width: 100,
@@ -133,18 +147,47 @@ class Player {
 			var right_edge = x_pos + radius
 			var top_edge = y_pos - radius
 			var bottom_edge = y_pos + radius
-	
 		}
-		if (global_state.right_pressed && !if_obstacle_at_position(global_state.obstacles, right_edge + distance, y_pos)) {
+
+		var leftCoordinates = [
+			[x_pos - distance - radius * 0.5, y_pos - radius],
+			[x_pos - distance - radius, y_pos - radius * 0.5],
+			[x_pos - distance - radius, y_pos],
+			[x_pos - distance - radius, y_pos + radius * 0.5],
+			[x_pos - distance - radius * 0.5, y_pos + radius]
+		];
+		var rightCoordinates = [
+			[distance + x_pos + radius * 0.5, y_pos - radius],
+			[distance + x_pos + radius, y_pos - radius * 0.5],
+			[distance + x_pos + radius, y_pos],
+			[distance + x_pos + radius, y_pos + radius * 0.5],
+			[distance + x_pos + radius * 0.5, y_pos + radius]
+		];
+		var topCoordinates = [
+			[x_pos - radius, y_pos - distance - radius * 0.5],
+			[x_pos - radius * 0.5, y_pos - distance - radius],
+			[x_pos, y_pos - distance - radius],
+			[x_pos + radius * 0.5, y_pos - distance - radius],
+			[x_pos + radius, y_pos - distance - radius * 0.5]
+		];
+		var bottomCoordinates = [
+			[x_pos - radius, y_pos + distance + radius * 0.5],
+			[x_pos - radius * 0.5, y_pos + distance + radius],
+			[x_pos, y_pos + distance + radius],
+			[x_pos + radius * 0.5, y_pos + distance + radius],
+			[x_pos + radius, y_pos + distance + radius * 0.5]
+		];
+
+		if (global_state.right_pressed && !if_obstacle_at_coordinates(global_state.obstacles, rightCoordinates)) {
 			this.state.x_pos += distance;
 		}
-		if (global_state.left_pressed && !if_obstacle_at_position(global_state.obstacles, left_edge - distance, y_pos)) {
+		if (global_state.left_pressed && !if_obstacle_at_coordinates(global_state.obstacles, leftCoordinates)) {
 			this.state.x_pos -= distance;
 		}
-		if (global_state.down_pressed && !if_obstacle_at_position(global_state.obstacles, x_pos, bottom_edge + distance)) {
+		if (global_state.down_pressed && !if_obstacle_at_coordinates(global_state.obstacles, bottomCoordinates)) {
 			this.state.y_pos += distance;
 		}
-		if (global_state.up_pressed && !if_obstacle_at_position(global_state.obstacles, x_pos, top_edge - distance) ) {
+		if (global_state.up_pressed && !if_obstacle_at_coordinates(global_state.obstacles, topCoordinates) ) {
 			this.state.y_pos -= distance;
 		}
 	}

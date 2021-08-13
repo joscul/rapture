@@ -3,8 +3,10 @@ class Player {
 
 	constructor() {
 		this.state = {
-			x_pos: 0,
-			y_pos: 0,
+			x_pos: 50,
+			y_pos: 50,
+			shape: "circle",
+			radius: 50,
 			width: 100,
 			height: 100,
 			color: "yellow",
@@ -13,33 +15,75 @@ class Player {
 	}
 
 	draw(ctx) {
-		const {color, x_pos, y_pos, width, height} = this.state;
-		ctx.fillStyle = color;
-		//ctx.fillRect(x_pos, y_pos, width, height);
-		//ctx.clearRect(x_pos+5, y_pos+5, width-10, height-10);
-		ctx.beginPath();
-		ctx.arc(x_pos+75, y_pos+75, 50, 0, 2*Math.PI);
-		ctx.fill();
-		ctx.fillStyle = "red";
-		ctx.beginPath();
-		ctx.arc(75, 75, 40, 0,25*Math.P, 0,75*Math.PI);
-		ctx.fill();
+		const {color, x_pos, y_pos, shape, radius, width, height} = this.state;
+		if (shape == "circle") {
+			ctx.fillStyle = color;
+			ctx.beginPath();
+			ctx.arc(x_pos, y_pos, radius, 0, 2*Math.PI);
+			ctx.fill();
+			//Draw mouth
+			ctx.strokeStyle = "red";
+			ctx.beginPath();
+			ctx.lineWidth = 3;
+			ctx.arc(x_pos, y_pos, radius*0.75, 0.25*Math.PI, 0.75*Math.PI);
+			ctx.stroke();
+			//Draw left eye
+			ctx.fillStyle = "white";
+			ctx.beginPath();
+			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.25, radius*0.25, 0, 2*Math.PI);
+			ctx.fill();
+			ctx.strokeStyle = "black";
+			ctx.beginPath();
+			ctx.lineWidth = 1;
+			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.25, radius*0.25, 0, 2*Math.PI);
+			ctx.stroke();
+			ctx.fillStyle = "black";
+			ctx.beginPath();
+			ctx.arc(x_pos-radius*0.35, y_pos-radius*0.25, radius*0.1, 0, 2*Math.PI);
+			ctx.fill();
+			//Draw right eye
+			ctx.fillStyle = "white";
+			ctx.beginPath();
+			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.25, radius*0.25, 0, 2*Math.PI);
+			ctx.fill();
+			ctx.strokeStyle = "black";
+			ctx.beginPath();
+			ctx.lineWidth = 1;
+			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.25, radius*0.25, 0, 2*Math.PI);
+			ctx.stroke();
+			ctx.fillStyle = "black";
+			ctx.beginPath();
+			ctx.arc(x_pos+radius*0.35, y_pos-radius*0.25, radius*0.1, 0, 2*Math.PI);
+			ctx.fill();
+		} else if (shape == "rect"){
+			ctx.fillRect(x_pos-(width*0.5), y_pos-(height*0.5), width, height);
+		}
 
 	}
 
 	update(global_state, dt) {
-		const {color, x_pos, y_pos, width, height, speed} = this.state;
+		const {color, x_pos, y_pos, shape, radius, width, height, speed} = this.state;
 		const distance = speed * dt //Speed in pixels per second multiplied by seconds since last update
-		if (global_state.right_pressed && (x_pos + width) < global_state.canvas_width) {
+		var left_edge = x_pos - (width*0.5)
+		var right_edge = x_pos + (width*0.5)
+		var top_edge = y_pos - (height*0.5)
+		var bottom_edge = y_pos + (height*0.5)
+		if (shape == "circle"){
+			var left_edge = x_pos - radius
+			var right_edge = x_pos + radius
+			var top_edge = y_pos - radius
+			var bottom_edge = y_pos + radius
+		}
+		if (global_state.right_pressed && right_edge < global_state.canvas_width) {
 			this.state.x_pos += distance;
 		}
-		if (global_state.left_pressed && x_pos > 0) {
+		if (global_state.left_pressed && left_edge > 0) {
 			this.state.x_pos -= distance;
 		}
-		if (global_state.down_pressed && (y_pos + height) < global_state.canvas_height) {
+		if (global_state.down_pressed && bottom_edge < global_state.canvas_height) {
 			this.state.y_pos += distance;
 		}
-		if (global_state.up_pressed && y_pos > 0) {
+		if (global_state.up_pressed && top_edge > 0) {
 			this.state.y_pos -= distance;
 		}
 	}

@@ -1,3 +1,29 @@
+class Obstacle {
+
+	constructor(initial_width, initial_height, initial_xpos, initial_ypos) {
+		this.state = {
+			color: "green",
+			width: initial_width,
+			height: initial_height,
+			
+			x_pos: initial_xpos, 
+			y_pos: initial_ypos,
+
+		}
+	}
+
+	draw(ctx) {
+		const {color, width, height, x_pos, y_pos} = this.state;
+		ctx.fillStyle = color;
+		ctx.fillRect(x_pos, y_pos, width, height);
+
+	}
+
+	update(global_state, dt) {
+		
+	}
+
+}
 
 class Player {
 
@@ -123,18 +149,25 @@ var initial_state = function (canvas) {
 		canvas_width: canvas.width,
 		canvas_height: canvas.height,
 		player: new Player(),
-		background: new Background(canvas.width, canvas.height)
+		background: new Background(canvas.width, canvas.height),
+		obstacles: [
+			new Obstacle(200, 100, 100, 100),
+			new Obstacle(100, 200, 300, 400),
+			new Obstacle(10, canvas.height/1.2, canvas.width/2, 0),
+		]
 	};
 }
 
 
 var draw = function (ctx, state, dt) {
-	state.background.draw(ctx)
-	state.player.draw(ctx)
-
-	state.player.update(state, dt);
+	state.background.draw(ctx);
+	state.player.draw(ctx);	
+	for(var i in state.obstacles){
+		state.obstacles[i].draw	(ctx);
+	}
+	state.player.update(state, dt);	
 	state.background.update(state, dt);
-
+    //state.obstacles.update(state, dt);
 };
 
 var clear_canvas = function (ctx, state) {

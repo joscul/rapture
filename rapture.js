@@ -10,8 +10,8 @@ var if_obstacle_at_position = function(obstacles, x_pos, y_pos) {
 }
 
 var if_obstacle_at_coordinates = function(obstacles, coordinates) {
-	for(var i in coordinates) {
-		var coordinate = coordinates[i];
+	for(var n in coordinates) {
+		var coordinate = coordinates[n];
 		for(var i in obstacles) {
 			if	(obstacles[i].overlaps_with_position(coordinate[0], coordinate[1])) {
 				return true;
@@ -68,6 +68,32 @@ class Obstacle {
 
 }
 
+class InventorySlot {
+
+	constructor(initial_xpos, initial_ypos) {
+		this.state = {
+			color: "black",
+			width: 40,
+			height: 40,
+			
+			x_pos: initial_xpos, 
+			y_pos: initial_ypos,
+
+		}
+	}
+
+	draw(ctx) {
+		const {color, width, height, x_pos, y_pos} = this.state;
+		ctx.fillStyle = color;
+		ctx.fillRect(x_pos, y_pos, width, height);
+
+	}
+
+	update(global_state, dt) {
+		
+	}
+}
+
 var if_items_at_position = function(items, x_pos, y_pos) {
 	for(var i in items) {
 		if	(items[i].overlaps_with_position(x_pos, y_pos)) {
@@ -80,9 +106,9 @@ var if_items_at_position = function(items, x_pos, y_pos) {
 
 class Item {
 
-	constructor(initial_width, initial_height, initial_xpos, initial_ypos) {
+	constructor(initial_width, initial_height, initial_xpos, initial_ypos, initial_img_name) {
 		var img = new Image(); // Image constructor
-		img.src = 'key.png';
+		img.src = initial_img_name;
 		this.state = {
 			image: img,
 			width: initial_width,
@@ -94,14 +120,12 @@ class Item {
 		}
 	}
 
-
 	draw(ctx) {
 
 		const {image, width, height, x_pos, y_pos, is_in_inventory} = this.state;
 
 			if ((is_in_inventory)){
 				ctx.drawImage(image, 0, 0);
-			
 		}	
 		else{ 
 		ctx.drawImage(image, x_pos, y_pos);}
@@ -113,7 +137,6 @@ class Item {
 			this.state.is_in_inventory = true;
 		}
 	}
-	
 
 	overlaps_with_position(x, y) {
 		const {width, height, x_pos, y_pos} = this.state;
@@ -283,7 +306,12 @@ class Background {
 
 }
 
+
 var initial_state = function (canvas) {
+	var inventory_slots_create = [];
+	for (var i = 0; i < 10; i++) {
+		inventory_slots_create.push(new InventorySlot(10 + i * 50, 10))
+	}
 	return {
 		right_pressed: false,
 		left_pressed: false,
@@ -294,36 +322,41 @@ var initial_state = function (canvas) {
 		player: new Player(),
 		background: new Background(canvas.width, canvas.height),
 		obstacles: [
-			new Obstacle(200, 100, 100, 700),
-			new Obstacle(100, 200, 270, 150),
-			new Obstacle(30, canvas.height/1.2, canvas.width/2, 0),
 			new Obstacle(30,canvas.height ,0 ,0),//left edge
 			new Obstacle(canvas.width,70,0,0),//top edge
 			new Obstacle(30, canvas.height, canvas.width - 30, 0),//right edge
 			new Obstacle(canvas.width, 30, 0, canvas.height - 30),//bottom edge
 			new Obstacle(200, 100, 10, 250),
 			new Obstacle(200, 100, 100, 30),
+			new Obstacle(200, 100, 100, 700),
+			new Obstacle(100, 200, 270, 150),
+			new Obstacle(30, canvas.height/1.2, canvas.width/2, 0),
 		],
 		items: [
-			new Item(100, 100, canvas.width-100, 100),
+			new Item(40, 40, canvas.width-100, 100, "key.png"),
 			
-		]
+		],
+		inventory_slots: inventory_slots_create
 	};
+
 }
 
 
 var draw = function (ctx, state, dt) {
 	state.background.draw(ctx);
-	state.player.draw(ctx);	
 	for(var i in state.obstacles){
 		state.obstacles[i].draw	(ctx);
 	}
-	for(var i in state.items){
-		state.items[i].draw	(ctx);
+	for(var i in state.inventory_slots){
+		state.inventory_slots[i].draw(ctx);
 	}
+	for(var i in state.items){
+		state.items[i].draw(ctx);
+	}
+	state.player.draw(ctx);	
+
 	state.player.update(state, dt);	
 	state.background.update(state, dt);
-
 	for(var i in state.obstacles){
 		state.obstacles[i].update	(state, dt);
 	}

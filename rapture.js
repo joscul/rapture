@@ -3,10 +3,18 @@ var if_obstacle_at_position = function(obstacles, x_pos, y_pos) {
 	for(var i in obstacles) {
 		if	(obstacles[i].overlaps_with_position(x_pos, y_pos)) {
 			return true;
-
 		}
 	}
 	return false;
+}
+
+var available_slot = function(inventory_slots) {
+	for(var i in inventory_slots) {
+		if	(inventory_slots[i].state.available_slot) {
+			return i;
+		}
+	}
+	return null;
 }
 
 var if_obstacle_at_coordinates = function(obstacles, coordinates) {
@@ -17,12 +25,19 @@ var if_obstacle_at_coordinates = function(obstacles, coordinates) {
 				return true;
 			}
 		}
-	
 	}
 	return false;
 	
 }
 
+var if_items_at_position = function(items, x_pos, y_pos) {
+	for(var i in items) {
+		if	(items[i].overlaps_with_position(x_pos, y_pos)) {
+			return true;
+		}
+	}
+	return false;
+}
 
 class Obstacle {
 
@@ -31,10 +46,8 @@ class Obstacle {
 			color: "green",
 			width: initial_width,
 			height: initial_height,
-			
 			x_pos: initial_xpos, 
 			y_pos: initial_ypos,
-
 		}
 	}
 
@@ -42,7 +55,6 @@ class Obstacle {
 		const {color, width, height, x_pos, y_pos} = this.state;
 		ctx.fillStyle = color;
 		ctx.fillRect(x_pos, y_pos, width, height);
-
 	}
 
 	update(global_state, dt) {
@@ -75,10 +87,9 @@ class InventorySlot {
 			color: "black",
 			width: 40,
 			height: 40,
-			
 			x_pos: initial_xpos, 
 			y_pos: initial_ypos,
-
+			available_slot: true
 		}
 	}
 
@@ -86,22 +97,11 @@ class InventorySlot {
 		const {color, width, height, x_pos, y_pos} = this.state;
 		ctx.fillStyle = color;
 		ctx.fillRect(x_pos, y_pos, width, height);
-
 	}
 
 	update(global_state, dt) {
 		
 	}
-}
-
-var if_items_at_position = function(items, x_pos, y_pos) {
-	for(var i in items) {
-		if	(items[i].overlaps_with_position(x_pos, y_pos)) {
-			return true;
-
-		}
-	}
-	return false;
 }
 
 class Item {
@@ -116,26 +116,26 @@ class Item {
 			
 			x_pos: initial_xpos, 
 			y_pos: initial_ypos,
-			is_in_inventory: false 	
+			is_in_inventory: false,
+			inventory_slot: null,
+			used_up_item: false
 		}
 	}
 
 	draw(ctx) {
-
 		const {image, width, height, x_pos, y_pos, is_in_inventory} = this.state;
-
-			if ((is_in_inventory)){
-				ctx.drawImage(image, 0, 0);
-		}	
-		else{ 
-		ctx.drawImage(image, x_pos, y_pos);}
+		ctx.drawImage(image, x_pos, y_pos);
 
 	}
 
 	update(global_state, dt) {
-		if (this.overlaps_with_position (global_state.player.state.x_pos,  global_state.player.state.y_pos)){
+		if (this.overlaps_with_position (global_state.player.state.x_pos, global_state.player.state.y_pos)){
 			this.state.is_in_inventory = true;
+			this.state.inventory_slot = available_slot(global_state.inventory_slots);
+			this.state.x_pos = global_state.inventory_slots[this.state.inventory_slot].state.x_pos;
+			this.state.y_pos = global_state.inventory_slots[this.state.inventory_slot].state.y_pos;
 		}
+
 	}
 
 	overlaps_with_position(x, y) {
@@ -306,7 +306,6 @@ class Background {
 
 }
 
-
 var initial_state = function (canvas) {
 	var inventory_slots_create = [];
 	for (var i = 0; i < 10; i++) {
@@ -345,7 +344,7 @@ var initial_state = function (canvas) {
 var draw = function (ctx, state, dt) {
 	state.background.draw(ctx);
 	for(var i in state.obstacles){
-		state.obstacles[i].draw	(ctx);
+		state.obstacles[i].draw(ctx);
 	}
 	for(var i in state.inventory_slots){
 		state.inventory_slots[i].draw(ctx);
@@ -358,10 +357,10 @@ var draw = function (ctx, state, dt) {
 	state.player.update(state, dt);	
 	state.background.update(state, dt);
 	for(var i in state.obstacles){
-		state.obstacles[i].update	(state, dt);
+		state.obstacles[i].update(state, dt);
 	}
 	for(var i in state.items){
-		state.items[i].update	(state, dt);
+		state.items[i].update(state, dt);
 	}
 };
 

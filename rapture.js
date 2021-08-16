@@ -102,6 +102,15 @@ class InventorySlot {
 	update(global_state, dt) {
 		
 	}
+
+	
+	place_item() {
+		this.state.available_slot = false;
+	}
+
+	use_item() {
+		this.state.available_slot = true;
+	}
 }
 
 class Item {
@@ -134,6 +143,7 @@ class Item {
 			this.state.inventory_slot = available_slot(global_state.inventory_slots);
 			this.state.x_pos = global_state.inventory_slots[this.state.inventory_slot].state.x_pos;
 			this.state.y_pos = global_state.inventory_slots[this.state.inventory_slot].state.y_pos;
+			global_state.inventory_slots[this.state.inventory_slot].place_item();
 		}
 
 	}
@@ -333,6 +343,7 @@ var initial_state = function (canvas) {
 		],
 		items: [
 			new Item(40, 40, canvas.width-100, 100, "key.png"),
+			new Item(40, 40, canvas.width-100, 500, "key.png"),
 			
 		],
 		inventory_slots: inventory_slots_create

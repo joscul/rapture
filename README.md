@@ -1,4 +1,11 @@
-# Get started
+# Rapture
+
+## Building with emscripten
+```
+```
+
+## GIT info
+Also check out this simple documentation for git: https://rogerdudler.github.io/git-guide/
 
 ### Generate SSH key pair. Do this once and keep those keys for some time.
 ```

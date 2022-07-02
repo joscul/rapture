@@ -2,14 +2,19 @@
 
 cd `dirname $0`
 
+# Make sure npm is installed.
+
+
+em_version=sdk-upstream-master-32bit
+
 if [ ! -d "build/emsdk" ]; then
 
 	mkdir build
 	cd build
 	git clone https://github.com/emscripten-core/emsdk.git
 	cd emsdk
-	./emsdk install latest
-	./emsdk activate latest
+	./emsdk install $em_version
+	./emsdk activate $em_version
 	source ./emsdk_env.sh 2> /dev/null
 	cd ..
 

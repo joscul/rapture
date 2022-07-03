@@ -4,7 +4,6 @@ cd `dirname $0`
 
 # Make sure npm is installed.
 
-
 em_version=sdk-upstream-master-32bit
 
 if [ ! -d "build/emsdk" ]; then
@@ -28,4 +27,4 @@ fi
 mkdir -p textures
 cp ../textures/* ./textures/
 
-emcc ../src/main.cpp ../src/graphics.cpp -std=c++14 -s WASM=1 -s USE_SDL=2  -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s ALLOW_MEMORY_GROWTH=1  -s USE_WEBGL2=1 --use-preload-plugins --preload-file textures/ -g -o index.html
+emcc ../src/main.cpp ../src/graphics.cpp ../src/entity.cpp -std=c++17 -s WASM=1 -s USE_SDL=2  -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s ALLOW_MEMORY_GROWTH=1  -s USE_WEBGL2=1 --use-preload-plugins --preload-file textures/ -g -o index.html

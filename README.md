@@ -2,6 +2,8 @@
 
 ## Building with emscripten
 ```
+./configure
+./build_em.sh
 ```
 
 ## GIT info

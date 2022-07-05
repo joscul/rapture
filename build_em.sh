@@ -4,7 +4,10 @@ cd `dirname $0`
 
 # Make sure npm is installed.
 
-em_version=sdk-upstream-master-32bit
+em_version=latest
+
+# use the following line instead if running on raspberry PI for example. But it takes many hours to build on raspberry...
+#em_version=sdk-upstream-master-32bit
 
 if [ ! -d "build/emsdk" ]; then
 

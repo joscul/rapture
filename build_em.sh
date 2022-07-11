@@ -30,4 +30,4 @@ fi
 mkdir -p textures
 cp ../textures/* ./textures/
 
-emcc ../src/main.cpp ../src/graphics.cpp ../src/entity.cpp -std=c++17 -s WASM=1 -s USE_SDL=2  -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s ALLOW_MEMORY_GROWTH=1  -s USE_WEBGL2=1 --use-preload-plugins --preload-file textures/ -g -o index.html
+emcc ../src/main.cpp ../src/graphics.cpp ../src/map.cpp ../src/direction.cpp ../src/controls.cpp ../src/entity/entity.cpp ../src/entity/belt.cpp ../src/entity/inventory.cpp ../src/animation/animation.cpp -I../src -std=c++20 -s WASM=1 -s USE_SDL=2  -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s ALLOW_MEMORY_GROWTH=1  -s USE_WEBGL2=1 --use-preload-plugins --preload-file textures/ -g -o index.html
